@@ -77,7 +77,7 @@ for word in words:
 
 
 email_from = "admin@kotek.co"
-email_to = ["kotek.vojtech@gmail.com"] # MUST BE A LIST
+email_to = "kotek.vojtech@gmail.com" # MUST BE A LIST
 email_subject = "Words for today"
 email_text = "\n".join(words)
 
