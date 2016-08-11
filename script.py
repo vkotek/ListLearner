@@ -24,20 +24,20 @@ class wordmailer(object):
             words = f.read().splitlines()
         self.words = words[self.cfg_cursor:self.cfg_cursor+self.cfg_words]
         return self.words
-
+    
     def preMail(self,word,definition):
         text = word+"\n"+pprint.pformat(definition)
         return text
-
+    
     def mailer(self, text):
         server = 'kotek.co'
         to = [self.cfg_email]
         fm = 'admin@kotek.co'
         msg = text
-
+        
         session = smtplib.SMTP(server)
         session.sendmail(fm,to,msg)
-
+        
 
 
 class dictionary(object):
@@ -63,7 +63,7 @@ class dictionary(object):
             e = sys.exc_info()
             error = "Error getting definition. Sorry.\n\n%s\n\n%s" % (url,e)
 
-"""
+
 # Initiate config file
 a = wordmailer()
 # Fetch current word list
@@ -74,28 +74,20 @@ dct = dictionary()
 body = []
 for word in words:
     body.append(a.preMail(word,dct.getDef(word)))
-"""
+
 
 email_from = "admin@kotek.co"
-email_to = "kotek.vojtech@gmail.com"
+email_to = ["kotek.vojtech@gmail.com"] # MUST BE A LIST
 email_subject = "Words for today"
-email_text = "HELLO!"
-
-email_body = """
-From: %s
-To: %s
-Subject: %s
-
-%s
-
-Sent by Python
-""" % (email_from,", ".join(email_to),email_subject,email_text)
+email_text = "\n".join(words)
 
 msg = MIMEMultipart()
 msg['Subject'] = email_subject
 msg['To'] = email_to
 msg['From'] = email_from
-msg.preamble = "Hello?"
+msg.preamble = """
+%s
+""" % email_text
 
 try:
     server = smtplib.SMTP('localhost')
