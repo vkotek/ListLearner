@@ -4,13 +4,12 @@ import configparser, urllib, json
 import urllib.request, urllib.parse
 import sys, pprint
 import smtplib
-
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 config_file = "config.ini"
 
-class wordmailer(object):
+class words(object):
 
     def __init__(self):
         config = configparser.RawConfigParser()
@@ -20,28 +19,14 @@ class wordmailer(object):
         self.cfg_words = config.getint('settings','words')
         self.cfg_email = config.get('settings','email')
 
-    def getWords(self):
+    def get(self):
         with open(self.cfg_wordlist) as f:
             words = f.read().splitlines()
         self.words = words[self.cfg_cursor:self.cfg_cursor+self.cfg_words]
-        return self.words
-    
-    def preMail(self,word,definition):
-        text = word+"\n"+pprint.pformat(definition)
-        return text
-    
-    def mailer(self, text):
-        server = 'kotek.co'
-        to = [self.cfg_email]
-        fm = 'admin@kotek.co'
-        msg = text
-        
-        session = smtplib.SMTP(server)
-        session.sendmail(fm,to,msg)
-        
+        return self.words       
 
 
-class dictionary(object):
+class dct(object):
 
     def __init__(self):
         config = configparser.RawConfigParser()
@@ -50,7 +35,7 @@ class dictionary(object):
         self.cfg_key = config.get('dictionary','key')
         self.cfg_lang = config.get('dictionary','lang')
 
-    def getDef(self, f):
+    def get(self, f):
         lang = "ru-en"
         url = self.cfg_url.format(self.cfg_key, lang, f)
         url = urllib.parse.quote(url, safe=':/?&=')
@@ -64,41 +49,59 @@ class dictionary(object):
             e = sys.exc_info()
             error = "Error getting definition. Sorry.\n\n%s\n\n%s" % (url,e)
 
+class mailer(object):
+
+    def __init__(self):
+        print("mailer init")
+        
+    def setup(self):
+        print('nothin')
+
+    def send(self, body):
+        email_from = "admin@kotek.co"
+        email_to = "kotek.vojtech@gmail.com" # MUST BE A LIST
+        email_subject = "Words for today"
+        #email_text = MIMEText("\n".join(words), "plain", "utf-8")
+        email_text = MIMEText(body, "plain", "utf-8")
+
+        msg = MIMEMultipart()
+        msg['Subject'] = email_subject
+        msg['To'] = email_to
+        msg['From'] = email_from
+        msg.attach(email_text)
+        try:
+            server = smtplib.SMTP('localhost')
+            server.ehlo()
+            server.sendmail(email_from, email_to, msg.as_string())
+            server.quit()
+            
+        except:
+            e = sys.exc_info()
+            print("Errorino")
+            print(e)
+
 
 # Initiate config file
-a = wordmailer()
+a = words()
+
 # Fetch current word list
-words = a.getWords()
+words = a.get()
+
 # Initiate dictionary connection
-dct = dictionary()
+dct = dct()
 
 body = []
+
 for word in words:
-    body.append(a.preMail(word,dct.getDef(word)))
+    definition = dct.get(word)
+    body = "<b>%s</b>\r\n%s" % (word,definition)
 
+body = "\r\n".join(body)
 
-email_from = "admin@kotek.co"
-email_to = "kotek.vojtech@gmail.com" # MUST BE A LIST
-email_subject = "Words for today"
-email_text = MIMEText("\n".join(words), "plain", "utf-8")
+mail = mailer()
 
-msg = MIMEMultipart()
-msg['Subject'] = email_subject
-msg['To'] = email_to
-msg['From'] = email_from
-
-msg.attach(email_text)
-
-try:
-    server = smtplib.SMTP('localhost')
-    server.ehlo()
-    server.sendmail(email_from, email_to, msg.as_string())
-    server.quit()
-    
-except:
-    e = sys.exc_info()
-    print("Errorino")
-    print(e)
+mail.setup()
+mail.send(body)
 
 
 """
