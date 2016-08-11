@@ -5,6 +5,8 @@ import urllib.request, urllib.parse
 import sys, pprint
 import smtplib
 
+from email.mime.multipart import MIMEMultipart
+
 config_file = "config.ini"
 
 class wordmailer(object):
@@ -85,12 +87,18 @@ Subject: %s
 
 %s
 
-""" % (email_from,email_to,email_subject,email_text)
+""" % (email_from,", ".join(email_to),email_subject,email_text)
+
+msg.MIMEMultipart()
+msg['Subject'] = email_subject
+msg['To'] = email_to
+msg['From'] = email_from
+msg.preamble = "Hello?"
 
 try:
     server = smtplib.SMTP('localhost')
     server.ehlo()
-    server.sendmail(email_from, email_to, email_body)
+    server.sendmail(email_from, email_to, msg.as_string())
     server.quit()
     
 except:
