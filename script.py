@@ -29,7 +29,7 @@ class wordmailer(object):
     
     def mailer(self, text):
         server = 'kotek.co'
-        to = self.cfg_email
+        to = [self.cfg_email]
         fm = 'admin@kotek.co'
         msg = text
         
