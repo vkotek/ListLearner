@@ -32,11 +32,11 @@ class words(object):
 class dct(object):
 
     def __init__(self):
-        config = configparser.RawConfigParser()
-        config.read(config_file)
-        self.cfg_url = config.get('dictionary','url')
-        self.cfg_key = config.get('dictionary','key')
-        self.cfg_lang = config.get('dictionary','lang')
+        self.config = configparser.RawConfigParser()
+        self.config.read(config_file)
+        self.cfg_url = self.config.get('dictionary','url')
+        self.cfg_key = self.config.get('dictionary','key')
+        self.cfg_lang = self.config.get('dictionary','lang')
 
     def get(self, f):
         lang = "ru-en"
@@ -77,7 +77,7 @@ class mailer(object):
         try:
             server = smtplib.SMTP('localhost')
             server.ehlo()
-            server.sendmail(email_from, email_to, msg.as_string())
+            server.sendmail(self.cfg_from, self.cfg_to, msg.as_string())
             server.quit()
             
         except:
