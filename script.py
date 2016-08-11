@@ -62,7 +62,7 @@ class mailer(object):
         email_to = "kotek.vojtech@gmail.com" # MUST BE A LIST
         email_subject = "Words for today"
         #email_text = MIMEText("\n".join(words), "plain", "utf-8")
-        email_text = MIMEText(body, "plain", "utf-8")
+        email_text = MIMEText(body, "html", "utf-8")
 
         msg = MIMEMultipart()
         msg['Subject'] = email_subject
@@ -90,17 +90,22 @@ words = a.get()
 # Initiate dictionary connection
 dct = dct()
 
+
+
 body = []
 
 for word in words:
+
     definition = dct.get(word)
-    body = "<b>%s</b>\r\n%s" % (word,definition)
+
+    line = "<h2>%s</h2><br>%s<hr>" % (word,definition)
+    body.append(line)
 
 body = "\r\n".join(body)
 
-mail = mailer()
 
-mail.setup()
+
+mail = mailer()
 mail.send(body)
 
 
