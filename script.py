@@ -96,14 +96,29 @@ body = []
 
 for word in words:
 
+    a = str(word)
     definition = dct.get(word)
+    
+    for f in definition:
+        a += "<h3>TRANSLATION:</h3>"
+        for t in f['tr']:
+            a += "<b>%s</b> - <i>%s</i><br>" % (t['text'],t['pos'])
+            try:
+                if len(t['ex'])>0:
+                    a += "<h4>EXAMPLES:</h4>"
+                for ex in t['ex']:
+                    a += "<li><b>%s</b>:<i>%s</i></li>" % (ex['text'],ex['tr'][0]['text'])
+            except:
+                continue
+    
+    
 
-    line = "<h2>%s</h2><br>%s<hr>" % (word,definition)
+    line = "<h2>%s</h2><br>%s<hr>" % (word,"".join(a))
     body.append(line)
 
-body = "\r\n".join(body)
+body = "".join(body)
 
-
+#print(body)
 
 mail = mailer()
 mail.send(body)
