@@ -77,7 +77,7 @@ for word in words:
 """
 
 email_from = "admin@kotek.co"
-email_to = "kotek.vojtech@gmail.com"
+email_to = "kotek.vojtec
 email_subject = "Words for today"
 email_text = "HELLO!"
 
