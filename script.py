@@ -6,6 +6,7 @@ import sys, pprint
 import smtplib
 
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 config_file = "config.ini"
 
@@ -79,7 +80,7 @@ for word in words:
 email_from = "admin@kotek.co"
 email_to = "kotek.vojtech@gmail.com" # MUST BE A LIST
 email_subject = "Words for today"
-email_text = "\n".join(words)
+email_text = MIMEText("\n".join(words), "plain", "utf-8")
 
 msg = MIMEMultipart()
 msg['Subject'] = email_subject
