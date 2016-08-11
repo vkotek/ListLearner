@@ -61,6 +61,7 @@ class dictionary(object):
             e = sys.exc_info()
             error = "Error getting definition. Sorry.\n\n%s\n\n%s" % (url,e)
 
+"""
 # Initiate config file
 a = wordmailer()
 # Fetch current word list
@@ -71,7 +72,9 @@ dct = dictionary()
 body = []
 for word in words:
     body.append(a.preMail(word,dct.getDef(word)))
-
+"""
+body = "Hello"
+a = wordmailer()
 a.mailer(body)
 
 
