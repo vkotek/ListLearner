@@ -89,7 +89,7 @@ Subject: %s
 
 """ % (email_from,", ".join(email_to),email_subject,email_text)
 
-msg.MIMEMultipart()
+msg = MIMEMultipart()
 msg['Subject'] = email_subject
 msg['To'] = email_to
 msg['From'] = email_from
