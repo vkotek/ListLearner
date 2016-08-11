@@ -95,19 +95,19 @@ dct = dct()
 body = []
 
 for word in words:
+    a = ""
 
-    a = str(word)
     definition = dct.get(word)
-    
+
     for f in definition:
-        a += "<h3>TRANSLATION:</h3>"
         for t in f['tr']:
-            a += "<b>%s</b> - <i>%s</i><br>" % (t['text'],t['pos'])
+            a += "<br><b>%s</b> - <i>%s</i><br>" % (t['text'],t['pos'])
             try:
                 if len(t['ex'])>0:
-                    a += "<h4>EXAMPLES:</h4>"
+                    a += "<h5>EXAMPLES:</h5><ul>"
                 for ex in t['ex']:
-                    a += "<li><b>%s</b>:<i>%s</i></li>" % (ex['text'],ex['tr'][0]['text'])
+                    a += "<li><b>%s</b>:  <i>%s</i></li>" % (ex['text'],ex['tr'][0]['text'])
+                a += "</ul>"
             except:
                 continue
     
