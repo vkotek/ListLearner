@@ -73,11 +73,30 @@ body = []
 for word in words:
     body.append(a.preMail(word,dct.getDef(word)))
 """
-body = "Hello"
-a = wordmailer()
-a.mailer(body)
 
+email_from = "admin@kotek.co"
+email_to = ["kotek.vojtech@gmail.com"] # MUST BE A LIST
+email_subject = "Words for today"
+email_text = "HELLO!"
+email_body = """
+From: %s
+To: %s
+Subject: %s
 
+%s
+
+""" % (email_from,email_to,email_subject,email_text)
+
+try:
+    server = smtplib.SMTP('localhost')
+    server.ehlo()
+    server.sendmail(email_from, email_to, email_body)
+    server.quit()
+    
+except:
+    e = sys.exc_info()
+    print("Errorino")
+    print(e)
 
 
 """
