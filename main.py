@@ -2,8 +2,8 @@
 
 import configparser, json, urllib.request, urllib.parse, sys
 
-config_file = "config.ini"
-cursorfile = "cursor.txt"
+config_file = "./config.ini"
+cursorfile = "./cursor.txt"
 send = True
 
 class words(object):
